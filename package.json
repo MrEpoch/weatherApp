@@ -9,16 +9,8 @@
     "start": "webpack serve --open",
     "build": "webpack"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MrEpoch/Todo-list-odin-project.git"
-  },
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/MrEpoch/Todo-list-odin-project/issues"
-  },
-  "homepage": "https://github.com/MrEpoch/Todo-list-odin-project#readme",
   "devDependencies": {
     "css-loader": "^6.7.3",
     "html-webpack-plugin": "^5.5.0",

@@ -3,14 +3,14 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
   mode: "development",
-  entry: "./src/index.js",
+  entry: "./src/app.js",
   devtool: "inline-source-map",
   devServer: {
     static: "./dist",
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: "Todo App",
+      title: "Weather app",
     }),
   ],
   output: {
