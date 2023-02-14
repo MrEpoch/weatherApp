@@ -6,7 +6,12 @@
   box-sizing: border-box;
 }
 
+@import url("https://fonts.googleapis.com/css2?family=Mukta:wght@200;300;400;500;600;700;800&display=swap");
+
 :root {
+  --primary-colors: #fef4e8;
+  --good-white: #e6e6e6;
+  --main-font: "Mukta", sans-serif;
 }
 
 html,
@@ -16,6 +21,8 @@ body {
 }
 
 body {
+  font-family: var(--main-font);
+  color: var(--good-white);
   height: 100%;
   width: 100%;
   display: grid;
@@ -32,11 +39,36 @@ body {
   grid-template-columns: 1fr 3fr 1fr;
 }
 
-.search-container {
+.middle-container {
   grid-column: 2 / 3;
   display: flex;
-  justify-content: center;
-  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  width: 50%;
+  justify-self: center;
+}
+
+.search-container {
+  width: 50%;
+  display: grid;
+  grid-template: 1fr / repeat(2, 1fr);
+  border-bottom: 3px solid black;
+}
+
+.search-svg {
+  grid-area: 1 / 2 / 2 /3;
+  width: 20px;
+  height: 20px;
+  justify-self: self-start;
+  transition: 3s;
+}
+
+.search-svg:hover {
+  cursor: pointer;
+  width: 25px;
+  height: 25;
+  transition: 0.3s;
 }
 
 input {
@@ -45,9 +77,12 @@ input {
 }
 
 .search {
+  color: var(--good-white);
+  grid-area: 1 / 1 / 2 / 2;
   width: 150px;
   height: 20px;
-  border-bottom: 2px solid black;
+  justify-self: self-end;
+  font-size: 16px;
 }
 
 .search:focus {
@@ -55,9 +90,29 @@ input {
 }
 
 .search::placeholder {
-  color: red;
+  font-size: 16px;
+  color: var(--primary-colors);
+  justify-self: self-end;
 }
 
 .bottom {
   grid-row: 2 / 3;
+}
+
+.left-info {
+  height: 50%;
+  display: flex;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+}
+
+.show-time {
+  border-bottom: 2px solid var(--primary-colors);
+  justify-self: center;
+  text-align: center;
+}
+
+.h2Degrees {
+  border-bottom: 2px solid var(--primary-colors);
 }
