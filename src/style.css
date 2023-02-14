@@ -1,30 +1,29 @@
 *,
 *:after,
 *:before {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 :root {
-
 }
 
 html,
 body {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 
 body {
-    height: 100%;
-    width: 100%;
-    display: grid;
-    grid-template-rows: 2fr 1fr;
-    background-image: url("./images/rosa.jpg");
-    background-position: center;
-    background-size: cover;
-    position: relative;
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-rows: 2fr 1fr;
+  background-image: url("./images/lastHadPix.jpg");
+  background-position: center;
+  background-size: cover;
+  position: relative;
 }
 
 .top {
@@ -41,26 +40,24 @@ body {
 }
 
 input {
-    border: none; 
-    background-color: transparent;
+  border: none;
+  background-color: transparent;
 }
 
 .search {
-    width: 150px;
-    height: 20px;
-    border-bottom: 2px solid black;
+  width: 150px;
+  height: 20px;
+  border-bottom: 2px solid black;
 }
 
 .search:focus {
-    outline: none;
+  outline: none;
 }
 
 .search::placeholder {
-    color: red;
+  color: red;
 }
 
 .bottom {
   grid-row: 2 / 3;
 }
-
-
