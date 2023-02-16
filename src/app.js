@@ -54,27 +54,14 @@ async function weatherLoad(location) {
   return { weather, tempCel, feelTempCel, weatherLike };
 }
 
-let location;
-let Myweather;
-
 async function locationChange(NewLocation) {
-  const newRequest = weatherLoad(NewLocation);
+  const newRequest = await weatherLoad(NewLocation);
   console.log(newRequest);
-  newRequest
-    .then((value) => {
-      console.log(newRequest);
-      location = NewLocation;
-      Myweather = value;
-      return Myweather;
-    })
-    .catch((err) => {
-      console.error(
-        "Build method which will give user error that this country doesn't exist"
-      );
-    });
+  return newRequest
 }
 
-let test = locationChange("London");
+let location = "London";
+let Myweather = locationChange("London").catch((err) => { console.error(err)});
 
 const svgThings = {
   search: `<svg class="search-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>magnify</title>
@@ -108,24 +95,23 @@ const mainInfo = (weather) => {
   const place = htmlMe.h3Create(location, "place-main");
   const h2Degrees = htmlMe.h2Create("", "h2Degrees");
   const showTime = htmlMe.h3Create("", "show-time");
-  test.then(() => {
-    Promise.all([weather]).then((value) => {
-      h2Degrees.append(Math.round(value[0].tempCel) + "°C");
-      const time = timeGet();
-      showTime.textContent =
-        time.dayNamed +
-        ", " +
-        time.dayNum +
-        "th" +
-        " " +
-        time.monthNamed +
-        " " +
-        time.year +
-        " " +
-        time.time;
-      console.log(value);
-      leftContainer.append(h2Degrees, place, showTime);
-    });
+  Promise.all([weather]).then((value) => {
+    console.log("err", value)
+    h2Degrees.append(Math.round(value[0].tempCel) + "°C");
+    const time = timeGet();
+    showTime.textContent =
+      time.dayNamed +
+      ", " +
+      time.dayNum +
+      "th" +
+      " " +
+      time.monthNamed +
+      " " +
+      time.year +
+      " " +
+      time.time;
+    console.log(value);
+    leftContainer.append(h2Degrees, place, showTime);
   });
   return leftContainer;
 };
@@ -162,8 +148,11 @@ const mainLoader = (weather) => {
 mainLoader(Myweather);
 
 function clickContent() {
-  locationChange(search[0].value);
-  mainLoader(Myweather);
+  console.log(search[0].value.trim())
+  if (search[0].value.trim().length !== 0) {
+    Myweather = locationChange(search[0].value).catch((err) => { console.error(err) });
+    mainLoader(Myweather);
+  }
 }
 
 console.log(svgSearch[0]);
