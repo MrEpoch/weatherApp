@@ -42,7 +42,7 @@ function timeGet() {
 
 async function weatherLoad(location) {
   const fetchWeather = await fetch(
-    `
+    `https://api.openweathermap.org/data/2.5/weather?q=${location}&APPID=3e2ec8741165eedcbeb5503d51b9acfc
     `,
     { mode: "cors" }
   );
@@ -51,8 +51,8 @@ async function weatherLoad(location) {
     const tempCel = convertTemp(weather.main.temp, "cel", "kel");
     const feelTempCel = convertTemp(weather.main.feels_like, "cel", "kel");
     const weatherLike = weather.weather[0].main;
-    const humidity = weather.main.feels_like + "%";
-    return { weather, tempCel, feelTempCel, weatherLike };
+    const humidity = weather.main.humidity + "%";
+    return { weather, tempCel, feelTempCel, weatherLike, humidity };
   }
 }
 
@@ -76,14 +76,18 @@ const svgThings = {
 
 const extraInfo = (weather) => {
   const rightContainer = htmlMe.divCreate("", "right-info");
-  Promise.all([weather]).then((value) => {});
+  const humidity = htmlMe.h3Create("", "humidity-extra");
+  Promise.all([weather]).then((value) => {
+    humidity.textContent = `Humidity: ${value[0].humidity}`;
+    rightContainer.append(humidity);
+  });
   return rightContainer;
 };
 
 const middleSearch = () => {
   const middleContainer = htmlMe.divCreate("", "middle-container");
   const searchContainer = htmlMe.divCreate("", "search-container");
-  const search = htmlMe.inputCreate("City..", "search", "text");
+  const search = htmlMe.inputCreate("Search..", "search", "text");
   searchContainer.innerHTML = svgThings.search;
   searchContainer.append(search);
   middleContainer.append(searchContainer);
@@ -92,11 +96,13 @@ const middleSearch = () => {
 
 const mainInfo = (weather) => {
   const leftContainer = htmlMe.divCreate("", "left-info");
+  const situation = htmlMe.h2Create("", "situation");
   const place = htmlMe.h3Create(location, "place-main");
   const h2Degrees = htmlMe.h2Create("", "h2Degrees");
   const showTime = htmlMe.h3Create("", "show-time");
   Promise.all([weather]).then((value) => {
-    console.log("err", value);
+    console.log(value, "confused");
+    situation.textContent = value[0].weatherLike;
     h2Degrees.append(Math.round(value[0].tempCel) + "°C");
     const time = timeGet();
     showTime.textContent =
@@ -111,7 +117,7 @@ const mainInfo = (weather) => {
       " " +
       time.time;
     console.log(value);
-    leftContainer.append(h2Degrees, place, showTime);
+    leftContainer.append(situation, h2Degrees, place, showTime);
   });
   return leftContainer;
 };
@@ -133,7 +139,7 @@ let bottom = areaLoad([], "bottom");
 let search = top.querySelector(".search");
 let svgSearch = top.querySelector(".search-svg");
 
-const mainLoader = (weather) => {
+const mainLoader = (weather, func) => {
   document.body.innerHTML = "";
 
   top = areaLoad(
@@ -141,16 +147,27 @@ const mainLoader = (weather) => {
     "top"
   );
   bottom = areaLoad([], "bottom");
+
   search = top.querySelector(".search");
   svgSearch = top.querySelector(".search-svg");
+  const listeners = () => {
+    svgSearch.addEventListener("click", () => {
+      func();
+    });
+
+    search.addEventListener("keypress", (event) => {
+      if (event.key === "Enter") {
+        console.log("enter was clicked");
+        event.preventDefault();
+        func();
+      }
+    });
+  };
+  listeners();
   document.body.append(top, bottom);
 };
 
-const searchLoader = () => {};
-
-mainLoader(Myweather);
-
-function clickContent(call) {
+function clickContent() {
   let Mysearch = top.getElementsByClassName("search");
   console.log(Mysearch[0].value.trim());
   if (Mysearch[0].value.trim().length !== 0) {
@@ -187,19 +204,4 @@ function clickContent(call) {
   }
 }
 
-console.log(svgSearch[0]);
-let call = 0;
-
-function mainListeners() {}
-
-svgSearch.addEventListener("click", () => {
-  clickContent();
-});
-
-search.addEventListener("keypress", (event) => {
-  if (event.key === "Enter") {
-    console.log("enter was clicked");
-    event.preventDefault();
-    clickContent(clickContent);
-  }
-});
+mainLoader(Myweather, clickContent);

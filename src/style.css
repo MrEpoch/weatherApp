@@ -27,7 +27,7 @@ body {
   width: 100%;
   display: grid;
   grid-template-rows: 2fr 1fr;
-  background-image: url("./images/lastHadPix.jpg");
+  background-image: url("./images/sunsetDark.jpg");
   background-position: center;
   background-size: cover;
   position: relative;
@@ -100,19 +100,30 @@ input {
 }
 
 .left-info {
-  height: 50%;
+  height: 65%;
   display: flex;
   justify-content: space-around;
   flex-direction: column;
   align-items: center;
 }
 
+.left-info * {
+  border-bottom: 2px solid var(--primary-colors);
+}
+
 .show-time {
+  word-spacing: 3px;
   border-bottom: 2px solid var(--primary-colors);
   justify-self: center;
   text-align: center;
 }
 
+.place-main {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
 .h2Degrees {
+  letter-spacing: 2px;
   border-bottom: 2px solid var(--primary-colors);
 }
