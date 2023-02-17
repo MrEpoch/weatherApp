@@ -47,21 +47,25 @@ async function weatherLoad(location) {
     { mode: "cors" }
   );
   const weather = await fetchWeather.json();
-  const tempCel = convertTemp(weather.main.temp, "cel", "kel");
-  const feelTempCel = convertTemp(weather.main.feels_like, "cel", "kel");
-  const weatherLike = weather.weather[0].main;
-  const humidity = weather.main.feels_like + "%";
-  return { weather, tempCel, feelTempCel, weatherLike };
+  if (weather.main !== undefined) {
+    const tempCel = convertTemp(weather.main.temp, "cel", "kel");
+    const feelTempCel = convertTemp(weather.main.feels_like, "cel", "kel");
+    const weatherLike = weather.weather[0].main;
+    const humidity = weather.main.feels_like + "%";
+    return { weather, tempCel, feelTempCel, weatherLike };
+  }
 }
 
 async function locationChange(NewLocation) {
   const newRequest = await weatherLoad(NewLocation);
   console.log(newRequest);
-  return newRequest
+  return newRequest;
 }
 
 let location = "London";
-let Myweather = locationChange("London").catch((err) => { console.error(err)});
+let Myweather = locationChange("London").catch((err) => {
+  console.error(err);
+});
 
 const svgThings = {
   search: `<svg class="search-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>magnify</title>
@@ -86,17 +90,13 @@ const middleSearch = () => {
   return middleContainer;
 };
 
-const time = new Date();
-const another = time.toString().split(" ");
-console.log(another);
-
 const mainInfo = (weather) => {
   const leftContainer = htmlMe.divCreate("", "left-info");
   const place = htmlMe.h3Create(location, "place-main");
   const h2Degrees = htmlMe.h2Create("", "h2Degrees");
   const showTime = htmlMe.h3Create("", "show-time");
   Promise.all([weather]).then((value) => {
-    console.log("err", value)
+    console.log("err", value);
     h2Degrees.append(Math.round(value[0].tempCel) + "°C");
     const time = timeGet();
     showTime.textContent =
@@ -130,42 +130,76 @@ let top = areaLoad(
 );
 let bottom = areaLoad([], "bottom");
 
-let search = top.getElementsByClassName("search");
-let svgSearch = top.getElementsByClassName("search-svg");
+let search = top.querySelector(".search");
+let svgSearch = top.querySelector(".search-svg");
 
 const mainLoader = (weather) => {
   document.body.innerHTML = "";
+
   top = areaLoad(
     [mainInfo(weather), middleSearch(), extraInfo(weather)],
     "top"
   );
   bottom = areaLoad([], "bottom");
-  top.getElementsByClassName("search");
-  svgSearch = top.getElementsByClassName("search-svg");
+  search = top.querySelector(".search");
+  svgSearch = top.querySelector(".search-svg");
   document.body.append(top, bottom);
 };
 
+const searchLoader = () => {};
+
 mainLoader(Myweather);
 
-function clickContent() {
-  console.log(search[0].value.trim())
-  if (search[0].value.trim().length !== 0) {
-    Myweather = locationChange(search[0].value).catch((err) => { console.error(err) });
-    mainLoader(Myweather);
+function clickContent(call) {
+  let Mysearch = top.getElementsByClassName("search");
+  console.log(Mysearch[0].value.trim());
+  if (Mysearch[0].value.trim().length !== 0) {
+    location = Mysearch[0].value;
+    const prev = Myweather;
+    Myweather = locationChange(Mysearch[0].value).catch((err) => {
+      console.error(err);
+    });
+    Myweather.then((value) => {
+      console.log(value);
+      if (value !== undefined) {
+        mainLoader(Myweather);
+        svgSearch.addEventListener("click", () => {
+          clickContent();
+        });
+
+        search.addEventListener("keypress", (event) => {
+          console.log(event.key);
+          if (event.key === "Enter") {
+            console.log("enter was clicked");
+            event.preventDefault();
+            clickContent(clickContent);
+          }
+        });
+        return true;
+      } else {
+        console.log("this fucker is not else right?", value);
+        Myweather = prev;
+        return false;
+      }
+    }).catch((err) => {
+      console.log(err, "error at clickContent()");
+    });
   }
 }
 
 console.log(svgSearch[0]);
+let call = 0;
 
-svgSearch[0].addEventListener("click", () => {
+function mainListeners() {}
+
+svgSearch.addEventListener("click", () => {
   clickContent();
 });
 
-search[0].addEventListener("keypress", (event) => {
-  console.log("Before enter");
+search.addEventListener("keypress", (event) => {
   if (event.key === "Enter") {
     console.log("enter was clicked");
     event.preventDefault();
-    clickContent();
+    clickContent(clickContent);
   }
 });
