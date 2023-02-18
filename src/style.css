@@ -53,21 +53,25 @@ body {
   width: 50%;
   display: grid;
   grid-template: 1fr / repeat(2, 1fr);
-  border-bottom: 3px solid black;
+  border-bottom: 3px solid var(--primary-colors);
 }
 
 .search-svg {
+  filter: invert(86%) sepia(5%) saturate(530%) hue-rotate(343deg)
+    brightness(107%) contrast(108%);
   grid-area: 1 / 2 / 2 /3;
   width: 20px;
   height: 20px;
-  justify-self: self-start;
-  transition: 3s;
+  justify-self: self-end;
+  transition: 0.3s;
 }
 
 .search-svg:hover {
+  filter: invert(78%) sepia(84%) saturate(65%) hue-rotate(302deg)
+    brightness(109%) contrast(99%);
   cursor: pointer;
   width: 25px;
-  height: 25;
+  height: 25px;
   transition: 0.3s;
 }
 
@@ -105,6 +109,18 @@ input {
   justify-content: space-around;
   flex-direction: column;
   align-items: center;
+}
+
+.right-info {
+  display: flex;
+  height: 50%;
+  justify-content: space-around;
+  flex-direction: column;
+  align-items: center;
+}
+
+.right-info * {
+  border-bottom: 2px solid var(--primary-colors);
 }
 
 .left-info * {

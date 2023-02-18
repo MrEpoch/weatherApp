@@ -1,10 +1,6 @@
 import "./style.css";
 import * as htmlMe from "./components/methods";
 
-// location Load:
-// api.openweathermap.org/data/2.5/forecast?lat={lat}&lon={lon}&appid={API key}
-// faker api:https://fakerapi.it/api/v1/credit_cards?_quantity=1
-
 function convertTemp(value, unitToBe, unitIs) {
   let returnedVal =
     "You didn't input to what you want value convert or what it was";
@@ -52,7 +48,17 @@ async function weatherLoad(location) {
     const feelTempCel = convertTemp(weather.main.feels_like, "cel", "kel");
     const weatherLike = weather.weather[0].main;
     const humidity = weather.main.humidity + "%";
-    return { weather, tempCel, feelTempCel, weatherLike, humidity };
+    const country = weather.sys.country;
+    const wind = weather.wind.speed;
+    return {
+      weather,
+      tempCel,
+      feelTempCel,
+      weatherLike,
+      humidity,
+      country,
+      wind,
+    };
   }
 }
 
@@ -77,9 +83,13 @@ const svgThings = {
 const extraInfo = (weather) => {
   const rightContainer = htmlMe.divCreate("", "right-info");
   const humidity = htmlMe.h3Create("", "humidity-extra");
+  const country = htmlMe.h3Create("", "country-extra");
+  const windSpeed = htmlMe.h3Create("", "wind-extra");
   Promise.all([weather]).then((value) => {
     humidity.textContent = `Humidity: ${value[0].humidity}`;
-    rightContainer.append(humidity);
+    country.textContent = `Country: ${value[0].country}`;
+    windSpeed.textContent = `Wind speed: ${value[0].wind}`;
+    rightContainer.append(humidity, country, windSpeed);
   });
   return rightContainer;
 };
