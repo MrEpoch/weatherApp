@@ -64,7 +64,6 @@ async function weatherLoad(location) {
 
 async function locationChange(NewLocation) {
   const newRequest = await weatherLoad(NewLocation);
-  console.log(newRequest);
   return newRequest;
 }
 
@@ -111,7 +110,6 @@ const mainInfo = (weather) => {
   const h2Degrees = htmlMe.h2Create("", "h2Degrees");
   const showTime = htmlMe.h3Create("", "show-time");
   Promise.all([weather]).then((value) => {
-    console.log(value, "confused");
     situation.textContent = value[0].weatherLike;
     h2Degrees.append(Math.round(value[0].tempCel) + "°C");
     const time = timeGet();
@@ -126,7 +124,6 @@ const mainInfo = (weather) => {
       time.year +
       " " +
       time.time;
-    console.log(value);
     leftContainer.append(situation, h2Degrees, place, showTime);
   });
   return leftContainer;
@@ -167,7 +164,6 @@ const mainLoader = (weather, func) => {
 
     search.addEventListener("keypress", (event) => {
       if (event.key === "Enter") {
-        console.log("enter was clicked");
         event.preventDefault();
         func();
       }
@@ -179,7 +175,6 @@ const mainLoader = (weather, func) => {
 
 function clickContent() {
   let Mysearch = top.getElementsByClassName("search");
-  console.log(Mysearch[0].value.trim());
   if (Mysearch[0].value.trim().length !== 0) {
     location = Mysearch[0].value;
     const prev = Myweather;
@@ -187,7 +182,6 @@ function clickContent() {
       console.error(err);
     });
     Myweather.then((value) => {
-      console.log(value);
       if (value !== undefined) {
         mainLoader(Myweather);
         svgSearch.addEventListener("click", () => {
@@ -195,21 +189,18 @@ function clickContent() {
         });
 
         search.addEventListener("keypress", (event) => {
-          console.log(event.key);
           if (event.key === "Enter") {
-            console.log("enter was clicked");
             event.preventDefault();
             clickContent(clickContent);
           }
         });
         return true;
       } else {
-        console.log("this fucker is not else right?", value);
         Myweather = prev;
         return false;
       }
     }).catch((err) => {
-      console.log(err, "error at clickContent()");
+      console.error(err);
     });
   }
 }
